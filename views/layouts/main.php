@@ -106,9 +106,6 @@ AdminAsset::register($this);
 <!-- /#wrapper -->
 
 <?php $this->endBody() ?>
-<script>
-	$('select').selectpicker();
-</script>
 </body>
 </html>
 <?php $this->endPage() ?>
