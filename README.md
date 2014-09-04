@@ -194,8 +194,8 @@ class MyController extends Controller
 }
 ```
 
-There is problem with `$viewPath`. Yii2 doesn't allow to redefine `$viewPath` in runtime, so we need to pass full path to our view.
-Also you can redefine `render()` method:
+There is problem with `$viewPath`. Yii2 doesn't allow to override `$viewPath` in runtime, so we need to pass full path to our view.
+Also you can override `render()` method:
 
 ```php
 public function render($view, $params = []) {
@@ -217,4 +217,5 @@ public function init()
 }
 ```
 
+Don't forget to create view `my/index`!
 Now go to `/admin/my` and you can see your page.
