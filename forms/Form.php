@@ -4,14 +4,11 @@
 namespace asdfstudio\admin\forms;
 
 
-use Yii;
 use asdfstudio\admin\forms\widgets\Button;
-use yii\base\InvalidCallException;
-use yii\base\InvalidConfigException;
-use yii\bootstrap\ActiveForm;
+use asdfstudio\admin\forms\widgets\Input;
+use Yii;
+use yii\base\Model;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
 
 /**
  * Class Form
@@ -20,48 +17,10 @@ use yii\helpers\Inflector;
  * Renders form with defined fields and layout.
  *
  * ```php
- * // example: two columns form
- *  echo Form::widget([
- *      'fields' => [ // first column
- *          'wrapper' => '<div class="col-md-8">{items}</div>',
- *          'items' => [
- *              [
- *                  'class' => ActiveField::className(), // field widget name
- *                  'attribute' => 'title', // model's attribute name
- *              ],
- *              [
- *                  'class' => DropdownField::className(), // field widget name
- *                  'attribute' => 'author', // model's attribute name
- *                  'query' => User::find()->indexBy('id'), // fill list of possible autohrs
- *              ],
- *              [
- *                  'class' => HtmlField::className(), // field widget name
- *                  'attribute' => 'content', // model's attribute name
- *              ],
- *          ],
- *      ],
- *      [ // second column
- *          'wrapper' => '<div class="col-md-4">{items}</div>',
- *          'items' => [
- *              [
- *                  'class' => DropdownField::className(), // field widget name
- *                  'attribute' => 'tags', // model's attribute name
- *              ],
- *              [
- *                  'id' => 'publish', // id is required for binding and executing action
- *                  'class' => Button::className(), // renders button, instead of input field,
- *                  'label' => 'Publish',
- *                  'action' => function($model) { // can be callable or string
- *                      return $model->publish();
- *                  },
- *              ],
- *          ],
- *      ],
- *  ]);
  *
  * ```
  */
-class Form extends ActiveForm
+class Form extends Model
 {
     /**
      * Model used in form
@@ -69,146 +28,109 @@ class Form extends ActiveForm
      */
     public $model;
     /**
-     * Fields list
-     * @var array
+     * View file
      */
-    public $fields = [];
-    /**
-     * If true, "Save" button will be rendered at end of form
-     * @var bool
-     */
-    public $renderSaveButton = true;
+    public $viewFile = null;
 
     /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        if ($this->renderSaveButton) {
-            $this->fields[] = [
-                'wrapper' => '<div class="form-group">{items}</div>',
-                'items' => [
-                    [
-                        'id' => 'save',
-                        'class' => Button::className(),
-                        'label' => Yii::t('admin', 'Save'),
-                        'options' => [
-                            'class' => 'btn btn-success',
-                        ],
-                    ],
-                ]
-            ];
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function run()
-    {
-        echo $this->renderForm($this->fields);
-        parent::run();
-    }
-
-    /**
-     * Renders form with fields
-     * @param array $fields
-     * @return string
-     * @throws InvalidConfigException
-     */
-    public function renderForm($fields)
-    {
-        if (isset($fields['visible']) && !$fields['visible']) {
-            return '';
-        }
-        if (!is_array($fields)) {
-            throw new InvalidConfigException('Parameter "fields" must be an array');
-        } elseif (isset($fields['class'])) {
-            if (is_a($fields['class'], Button::className(), true)) {
-                return Button::widget(ArrayHelper::merge([
-                    'tagName' => 'input',
-                    'options' => [
-                        'name' => $fields['id'],
-                        'type' => 'submit',
-                        'value' => $fields['label']
-                    ],
-                ], $fields));
-            } else {
-                if (!isset($fields['attribute'])) {
-                    throw new InvalidConfigException('Layout\'s field config must have "attribute" property');
-                }
-                return $this->field($this->model, $fields['attribute'])->widget($fields['class'], $fields);
-            }
-        } elseif (isset($fields['items'])) {
-            $items = $this->renderForm($fields['items']);
-            if (isset($fields['wrapper'])) {
-                $items = strtr($fields['wrapper'], ['{items}' => $items]);
-            }
-            return $items;
-        } else {
-            $out = '';
-            foreach ($fields as $field) {
-                if (is_array($field)) {
-                    $out .= $this->renderForm($field);
-                }
-            }
-            return $out;
-        }
-    }
-
-    /**
-     * Return registered actions list indexed by name
-     * @param array $actions
+     * List of model fields displayed in form
+     *
+     * ```php
+     *  return [
+     *      'id' => [
+     *          'class' => Input::className(),
+     *      ],
+     *      'username' => [
+     *          'class' => Input::className(),
+     *      ],
+     *      'status' => [
+     *          'class' => Select::className(),
+     *          'items' => [User::STATUS_ACTIVE => 'Active', User::STATUS_DELETED => 'Deleted'],
+     *      ],
+     *  ];
+     * ```
+     *
+     * Default is all model attributes with class = Input
+     *
      * @return array
      */
-    public function getActions($actions = null)
+    public function fields()
     {
-        if ($actions === null) {
-            $actions = $this->fields;
+        $fields = [];
+        foreach ($this->model->attributes() as $attribute) {
+            $fields[$attribute] = [
+                'class' => Input::className(),
+            ];
         }
-        if (is_array($actions)) {
-            $result = [];
-            if (isset($actions['action']) && isset($actions['id']) && is_a($actions['class'], Button::className(), true)) {
-                $result[$actions['id']] = $actions['action'];
-            } else {
-                $res = [];
-                foreach ($actions as $action) {
-                    $res = ArrayHelper::merge($res, $this->getActions($action));
-                }
-                $result = ArrayHelper::merge($result, $res);
-            }
-            return $result;
-        }
-        return [];
+
+        return $fields;
     }
 
     /**
-     * @throws \yii\base\InvalidCallException
+     * Form actions, triggered when form button is clicked
+     *
+     * ```php
+     *  return [
+     *      'ban' => [
+     *          'class' => Button::className(),
+     *          'label' => 'Ban',
+     *          'options' => [
+     *              'class' => 'btn btn-danger', // bootstrap button classes
+     *          ],
+     *          'action' => function($model, $form) { // can be callable or string
+     *               $model->status = User::STATUS_BANNED;
+     *               return true; // return true if success
+     *           }
+     *           // or
+     *           'action' => 'ban', // actionBan will be called
+     *      ],
+     * ];
+     * ```
+     * @return array
+     */
+    public function actions()
+    {
+        return [
+            'save' => [
+                'class' => Button::className(),
+                'label' => Yii::t('admin', 'Save'),
+                'options' => [
+                    'class' => 'btn btn-lg btn-success'
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Run actions
+     * @return bool
      */
     public function runActions()
     {
         $data = Yii::$app->getRequest()->getBodyParams();
-        $actions = $this->getActions();
+        $actions = $this->actions();
 
-        foreach ($actions as $action => $closure) {
-            if (isset($data[$action])) {
+        foreach ($actions as $id => $action) {
+            $closure = isset($action['action']) ? $action['action'] : null;
+            if (isset($data[$id])) {
                 if (is_callable($closure)) {
                     call_user_func($closure, $this->model);
                 } elseif (is_string($closure)) {
                     call_user_func([$this->model, $closure]);
                 } else {
-                    throw new InvalidCallException(sprintf('Method "%s" not found', $closure));
+
                 }
             }
         }
     }
 
-    public function saveModel()
-    {
-        return $this->model->save();
-    }
-
+    /**
+     * Load data into model. Using setters
+     * @see [[Model::load()]]
+     * @param array $data
+     * @param null $formName
+     * @return bool
+     */
     public function load($data, $formName = null)
     {
         $scope = $formName === null ? $this->model->formName() : $formName;

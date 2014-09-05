@@ -97,16 +97,16 @@ class ManageController extends Controller
 
     public function actionUpdate()
     {
-        if (Yii::$app->getRequest()->getIsPost()) {
-            /* @var Form $form */
-            $form = Yii::createObject(ArrayHelper::merge([
-                'model' => $this->model,
-            ], $this->entity->form('update')));
+        /* @var Form $form */
+        $form = Yii::createObject(ArrayHelper::merge([
+            'model' => $this->model,
+        ], $this->entity->form('update')));
 
+        if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             $form->runActions();
             if ($form->model->validate()) {
-                if ($form->saveModel()) {
+                if ($form->model->save()) {
                     $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
@@ -120,6 +120,7 @@ class ManageController extends Controller
         return $this->render('update', [
             'entity' => $this->entity,
             'model' => $this->model,
+            'form' => $form,
         ]);
     }
 
@@ -150,15 +151,15 @@ class ManageController extends Controller
     public function actionCreate()
     {
         $model = Yii::createObject($this->entity->model(), []);
-        if (Yii::$app->getRequest()->getIsPost()) {
-            /* @var Form $form */
-            $form = Yii::createObject(ArrayHelper::merge([
-                'model' => $model,
-            ], $this->entity->form('update')));
+        /* @var Form $form */
+        $form = Yii::createObject(ArrayHelper::merge([
+            'model' => $model,
+        ], $this->entity->form('update')));
 
+        if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             if ($form->model->validate()) {
-                if ($form->saveModel()) {
+                if ($form->model->save()) {
                     $this->module->trigger(Entity::EVENT_CREATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
@@ -179,6 +180,7 @@ class ManageController extends Controller
         return $this->render('create', [
             'entity' => $this->entity,
             'model' => $model,
+            'form' => $form,
         ]);
     }
 }

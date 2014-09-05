@@ -7,6 +7,7 @@ namespace asdfstudio\admin\base;
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\helpers\Inflector;
 use ReflectionClass;
 
@@ -37,41 +38,13 @@ abstract class Entity extends Component
      */
     public $id;
     /**
-     * @var string Model's class
+     * @var Model's class name
      */
     public $modelClass;
     /**
      * @var array Labels
      */
     public $labels;
-    /**
-     * @var array Attributes
-     */
-    public $attributes;
-
-    /**
-     * List of model's attributes for displaying table and view and edit pages configuration
-     *
-     * ```php
-     *  [ // display attributes. @see [[DetailView]] for configuration syntax
-     *      'id',
-     *      'username',
-     *      'bio:html',
-     *      'dob:date',
-     *      [ // support related models
-     *          'attribute' => 'posts', // getter name, e.g. getPosts()
-     *          'format' => ['model', ['labelAttribute' => 'title']], // @see [[AdminFormatter]]
-     *          'visible' => true, // visible item in list, view, create and update
-     *          'editable' => false, // edit item in update and create
-     *      ],
-     *  ],
-     * ```
-     *
-     * @return array
-     */
-    public static function attributes() {
-        return [];
-    }
 
     /**
      * Should return an array with single and plural form of model name, e.g.
@@ -82,7 +55,7 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public static function labels() {
+    public function labels() {
         $class = new ReflectionClass(static::className());
         $class = $class->getShortName();
 
@@ -99,7 +72,7 @@ abstract class Entity extends Component
      *
      * @return string
      */
-    public static function slug() {
+    public function slug() {
         return Inflector::slug(static::model());
     }
 
@@ -113,10 +86,7 @@ abstract class Entity extends Component
      * @return string
      * @throws InvalidConfigException
      */
-    public static function model()
-    {
-        throw new InvalidConfigException('Entity must have model name');
-    }
+    abstract public function model();
 
     /**
      * Class name of form using for update or create operation
@@ -126,9 +96,6 @@ abstract class Entity extends Component
      * ```php
      *  return [
      *      'class' => vendorname\blog\forms\PostForm::className(),
-     *      'fields' => [
-     *          ...
-     *      ]
      *  ];
      * ```
      *

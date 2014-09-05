@@ -14,6 +14,11 @@ abstract class Base extends InputWidget
      * @var bool
      */
     public $appendable = false;
+    /**
+     * Input "disabled" attribute
+     * @var bool
+     */
+    public $disabled = false;
 
     /**
      * Renders widget
@@ -27,7 +32,8 @@ abstract class Base extends InputWidget
             return Html::tag('div',
                 $this->renderWidget(). '<span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>',
                 [
-                    'class' => 'form-group input-group'
+                    'class' => 'form-group input-group',
+                    'disabled' => $this->disabled,
                 ]
             );
         }
