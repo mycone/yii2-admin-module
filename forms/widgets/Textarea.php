@@ -4,7 +4,6 @@ namespace asdfstudio\admin\forms\widgets;
 
 use Yii;
 use yii\helpers\Html;
-use yii\widgets\InputWidget;
 
 /**
  * Class Select
@@ -12,7 +11,7 @@ use yii\widgets\InputWidget;
  *
  * Renders active select widget with related models
  */
-class Textarea extends InputWidget
+class Textarea extends Base
 {
     /**
      * Textarea columns count
@@ -28,7 +27,7 @@ class Textarea extends InputWidget
     /**
      * @inheritdoc
      */
-    public function run()
+    public function renderWidget()
     {
         return Html::activeTextarea($this->model, $this->attribute, [
             'class' => 'form-control',

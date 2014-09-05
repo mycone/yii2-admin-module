@@ -4,7 +4,6 @@ namespace asdfstudio\admin\forms\widgets;
 
 use Yii;
 use yii\helpers\Html;
-use yii\widgets\InputWidget;
 
 /**
  * Class Select
@@ -12,7 +11,7 @@ use yii\widgets\InputWidget;
  *
  * Renders active input widget
  */
-class Input extends InputWidget
+class Input extends Base
 {
     /**
      * HTML input type
@@ -23,7 +22,7 @@ class Input extends InputWidget
     /**
      * @inheritdoc
      */
-    public function run()
+    public function renderWidget()
     {
         return Html::activeInput($this->type, $this->model, $this->attribute, [
             'class' => 'form-control',

@@ -21,6 +21,7 @@ class AdminAsset extends AssetBundle
     ];
     public $js = [
         'js/admin.js',
+        'js/form.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

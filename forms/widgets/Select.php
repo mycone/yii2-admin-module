@@ -6,7 +6,6 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\helpers\Html;
-use yii\widgets\InputWidget;
 use asdfstudio\admin\helpers\AdminHelper;
 
 /**
@@ -15,7 +14,7 @@ use asdfstudio\admin\helpers\AdminHelper;
  *
  * Renders active select widget with related models
  */
-class Select extends InputWidget
+class Select extends Base
 {
     /**
      * @var ActiveQuery|array
@@ -54,7 +53,7 @@ class Select extends InputWidget
     /**
      * @inheritdoc
      */
-    public function run()
+    public function renderWidget()
     {
         return Html::activeDropDownList($this->model, $this->attribute, $this->items, [
             'class' => 'form-control',

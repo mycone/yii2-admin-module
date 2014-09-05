@@ -4,13 +4,12 @@ namespace asdfstudio\admin\forms\widgets;
 
 use Yii;
 use yii\helpers\Html;
-use yii\widgets\InputWidget;
 
 /**
  * Class FileInput
  * @package asdfstudio\admin\forms\widgets
  */
-class FileInput extends InputWidget
+class FileInput extends Base
 {
     /**
      * HTML input type
@@ -25,7 +24,7 @@ class FileInput extends InputWidget
     /**
      * @inheritdoc
      */
-    public function run()
+    public function renderWidget()
     {
         return Html::activeInput($this->type, $this->model, $this->attribute, [
             'class' => 'form-control',
