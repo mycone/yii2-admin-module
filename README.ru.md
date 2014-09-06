@@ -10,7 +10,7 @@ Yii2 admin module
 
 ##Использование
 
-Сперва создайте модуль `admin` в директории моделй своего проекта (например `/path/to/project/frontent/modules/admin`). Создаёте класс `Module` расширяющий `asdfstudio\admin\Module`.
+Сперва создайте модуль `admin` в директории модулей своего проекта (например `/path/to/project/frontent/modules/admin`). Создаёте класс `Module` расширяющий `asdfstudio\admin\Module`.
 
 ```php
 use asdfstudio\admin\Module as AdminModule;
