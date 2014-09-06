@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use asdfstudio\admin\components\AdminFormatter;
 
 /**
