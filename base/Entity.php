@@ -8,8 +8,10 @@ use asdfstudio\admin\forms\Form;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
+use yii\grid\GridView;
 use yii\helpers\Inflector;
 use ReflectionClass;
+use yii\widgets\DetailView;
 
 /**
  * Class Entity
@@ -90,8 +92,8 @@ abstract class Entity extends Component
 
     /**
      * Class name of form using for update or create operation
-     * Default form class is `asdfstudio\admin\base\Form`
-     * For configuration syntax see [[[Form]]
+     * Default form class is `asdfstudio\admin\forms\Form`
+     * For configuration syntax see [[asdfstudio\admin\forms\Form]]
      *
      * ```php
      *  return [
@@ -105,6 +107,46 @@ abstract class Entity extends Component
     {
         return [
             'class' => Form::className(),
+        ];
+    }
+
+    /**
+     * Detail view of model
+     * Default detail view class is `asdfstudio\admin\details\Detail`
+     * For configuration syntax see [[asdfstudio\admin\details\Detail]]
+     *
+     * ```php
+     *  return [
+     *      'class' => vendorname\blog\details\PostDetail::className(),
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function detail()
+    {
+        return [
+            'class' => DetailView::className(),
+        ];
+    }
+
+    /**
+     * Class name of form using for update or create operation
+     * Default grid class is `asdfstudio\admin\grids\Grid`
+     * For configuration syntax see [[asdfstudio\admin\grids\Grid]]
+     *
+     * ```php
+     *  return [
+     *      'class' => vendorname\blog\grids\PostGrid::className(),
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function grid()
+    {
+        return [
+            'class' => GridView::className(),
         ];
     }
 }
