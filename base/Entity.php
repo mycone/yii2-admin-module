@@ -79,6 +79,27 @@ abstract class Entity extends Component
     }
 
     /**
+     * Access control rules
+     *
+     * @see [[yii\filters\AccessRule]]
+     * ```php
+     *  return [
+     *      [
+     *          'actions' => ['index', 'view', 'update'],
+     *          'roles' => ['@'],
+     *          'allow' => true,
+     *      ],
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function access()
+    {
+        return [];
+    }
+
+    /**
      * Model's class name
      *
      * ```php
