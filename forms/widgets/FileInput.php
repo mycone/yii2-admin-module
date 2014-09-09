@@ -6,18 +6,20 @@ use Yii;
 use yii\helpers\Html;
 
 /**
- * Class Select
- * @package asdfstudio\admin\widgets
- *
- * Renders active input widget
+ * Class FileInput
+ * @package asdfstudio\admin\forms\widgets
  */
-class Input extends Base
+class FileInput extends Base
 {
     /**
      * HTML input type
      * @var string
      */
-    public $type = 'text';
+    public $type = 'file';
+
+    public $imageClass;
+    public $imageAttribute = 'image';
+    public $filenameTemplate = '{filename}.{ext}';
 
     /**
      * @inheritdoc

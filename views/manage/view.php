@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use asdfstudio\admin\components\AdminFormatter;
 
 /**
@@ -10,9 +9,12 @@ use asdfstudio\admin\components\AdminFormatter;
  * @var asdfstudio\admin\base\Entity $entity
  */
 
-$this->title = $entity->labels[0];
-$this->params['breadcrumbs'][] = ['label' => $entity->labels[1], 'url' => ['manage/index', 'entity' => $entity->id]];
+$this->title = $entity->labels()[0];
+$this->params['breadcrumbs'][] = ['label' => $entity->labels()[1], 'url' => ['manage/index', 'entity' => $entity->id]];
 $this->params['breadcrumbs'][] = Yii::t('admin', 'View');
+
+$detail = $entity->detail();
+$detail = isset($detail['class']) ? $detail['class'] : $detail;
 ?>
 <div class="model-view">
     <p>
@@ -27,12 +29,11 @@ $this->params['breadcrumbs'][] = Yii::t('admin', 'View');
     </p>
 
     <div class="row">
-        <?=DetailView::widget([
+        <?php echo $detail::widget([
             'model' => $model,
             'formatter' => [
                 'class' => AdminFormatter::className(),
             ],
-            'attributes' => $entity->attributes
         ])?>
     </div>
 

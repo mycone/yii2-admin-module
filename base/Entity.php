@@ -6,9 +6,11 @@ namespace asdfstudio\admin\base;
 
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
+use yii\base\Model;
+use yii\grid\GridView;
 use yii\helpers\Inflector;
 use ReflectionClass;
+use yii\widgets\DetailView;
 
 /**
  * Class Entity
@@ -37,41 +39,9 @@ abstract class Entity extends Component
      */
     public $id;
     /**
-     * @var string Model's class
-     */
-    public $modelClass;
-    /**
      * @var array Labels
      */
     public $labels;
-    /**
-     * @var array Attributes
-     */
-    public $attributes;
-
-    /**
-     * List of model's attributes for displaying table and view and edit pages configuration
-     *
-     * ```php
-     *  [ // display attributes. @see [[DetailView]] for configuration syntax
-     *      'id',
-     *      'username',
-     *      'bio:html',
-     *      'dob:date',
-     *      [ // support related models
-     *          'attribute' => 'posts', // getter name, e.g. getPosts()
-     *          'format' => ['model', ['labelAttribute' => 'title']], // @see [[AdminFormatter]]
-     *          'visible' => true, // visible item in list, view, create and update
-     *          'editable' => false, // edit item in update and create
-     *      ],
-     *  ],
-     * ```
-     *
-     * @return array
-     */
-    public static function attributes() {
-        return [];
-    }
 
     /**
      * Should return an array with single and plural form of model name, e.g.
@@ -82,7 +52,7 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public static function labels() {
+    public function labels() {
         $class = new ReflectionClass(static::className());
         $class = $class->getShortName();
 
@@ -99,7 +69,7 @@ abstract class Entity extends Component
      *
      * @return string
      */
-    public static function slug() {
+    public function slug() {
         return Inflector::slug(static::model());
     }
 
@@ -107,28 +77,56 @@ abstract class Entity extends Component
      * Model's class name
      *
      * ```php
-     *  return vendorname\blog\Post::className();
+     *  return [
+     *      'class' => vendorname\blog\Post::className(),
+     *      'condition' => function($query) { // can be null, array or callable
+     *          return $query->where('owner_id' => 1);
+     *      }
+     *  ]
      * ```
      *
-     * @return string
-     * @throws InvalidConfigException
+     * @return array
      */
-    public static function model()
+    abstract public function model();
+
+    /**
+     * Return model's name (namespace + class)
+     *
+     * @return array|null
+     */
+    public function getModelName()
     {
-        throw new InvalidConfigException('Entity must have model name');
+        $model = $this->model();
+        if (is_array($model) && isset($model['class'])) {
+            return $model['class'];
+        } elseif (is_string($model)) {
+            return $model;
+        }
+        return null;
+    }
+
+    /**
+     * Return model's query conditions
+     *
+     * @return array|callable
+     */
+    public function getModelConditions()
+    {
+        $model = $this->model();
+        if (is_array($model) && isset($model['condition'])) {
+            return $model['condition'];
+        }
+        return [];
     }
 
     /**
      * Class name of form using for update or create operation
-     * Default form class is `asdfstudio\admin\base\Form`
-     * For configuration syntax see [[[Form]]
+     * Default form class is `asdfstudio\admin\forms\Form`
+     * For configuration syntax see [[asdfstudio\admin\forms\Form]]
      *
      * ```php
      *  return [
      *      'class' => vendorname\blog\forms\PostForm::className(),
-     *      'fields' => [
-     *          ...
-     *      ]
      *  ];
      * ```
      *
@@ -138,6 +136,46 @@ abstract class Entity extends Component
     {
         return [
             'class' => Form::className(),
+        ];
+    }
+
+    /**
+     * Detail view of model
+     * Default detail view class is `asdfstudio\admin\details\Detail`
+     * For configuration syntax see [[asdfstudio\admin\details\Detail]]
+     *
+     * ```php
+     *  return [
+     *      'class' => vendorname\blog\details\PostDetail::className(),
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function detail()
+    {
+        return [
+            'class' => DetailView::className(),
+        ];
+    }
+
+    /**
+     * Class name of form using for update or create operation
+     * Default grid class is `asdfstudio\admin\grids\Grid`
+     * For configuration syntax see [[asdfstudio\admin\grids\Grid]]
+     *
+     * ```php
+     *  return [
+     *      'class' => vendorname\blog\grids\PostGrid::className(),
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function grid()
+    {
+        return [
+            'class' => GridView::className(),
         ];
     }
 }

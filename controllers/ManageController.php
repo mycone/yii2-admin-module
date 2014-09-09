@@ -6,6 +6,7 @@ namespace asdfstudio\admin\controllers;
 use Yii;
 use yii\base\Event;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -76,7 +77,15 @@ class ManageController extends Controller
     {
         $entity = $this->getEntity($entity);
 
-        $query = call_user_func([$entity->model(), 'find']);
+        /* @var ActiveQuery $query */
+        $query = call_user_func([$entity->getModelName(), 'find']);
+        $condition = $entity->getModelConditions();
+        if (is_callable($condition)) {
+            $query = call_user_func($condition, $query);;
+        } elseif (is_array($condition)) {
+            $query = $query->where($condition);
+        }
+
         $modelsProvider = new ActiveDataProvider([
             'query' => $query
         ]);
@@ -97,16 +106,16 @@ class ManageController extends Controller
 
     public function actionUpdate()
     {
-        if (Yii::$app->getRequest()->getIsPost()) {
-            /* @var Form $form */
-            $form = Yii::createObject(ArrayHelper::merge([
-                'model' => $this->model,
-            ], $this->entity->form('update')));
+        /* @var Form $form */
+        $form = Yii::createObject(ArrayHelper::merge([
+            'model' => $this->model,
+        ], $this->entity->form('update')));
 
+        if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             $form->runActions();
             if ($form->model->validate()) {
-                if ($form->saveModel()) {
+                if ($form->model->save()) {
                     $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
@@ -120,6 +129,7 @@ class ManageController extends Controller
         return $this->render('update', [
             'entity' => $this->entity,
             'model' => $this->model,
+            'form' => $form,
         ]);
     }
 
@@ -150,15 +160,15 @@ class ManageController extends Controller
     public function actionCreate()
     {
         $model = Yii::createObject($this->entity->model(), []);
-        if (Yii::$app->getRequest()->getIsPost()) {
-            /* @var Form $form */
-            $form = Yii::createObject(ArrayHelper::merge([
-                'model' => $model,
-            ], $this->entity->form('update')));
+        /* @var Form $form */
+        $form = Yii::createObject(ArrayHelper::merge([
+            'model' => $model,
+        ], $this->entity->form('update')));
 
+        if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             if ($form->model->validate()) {
-                if ($form->saveModel()) {
+                if ($form->model->save()) {
                     $this->module->trigger(Entity::EVENT_CREATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
@@ -179,6 +189,7 @@ class ManageController extends Controller
         return $this->render('create', [
             'entity' => $this->entity,
             'model' => $model,
+            'form' => $form,
         ]);
     }
 }

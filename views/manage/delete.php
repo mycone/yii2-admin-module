@@ -9,8 +9,8 @@ use yii\bootstrap\ActiveForm;
  * @var asdfstudio\admin\base\Entity $entity
  */
 
-$this->title = $entity->labels[0];
-$this->params['breadcrumbs'][] = ['label' => $entity->labels[1], 'url' => ['index', 'item' => $entity->id]];
+$this->title = $entity->labels()[0];
+$this->params['breadcrumbs'][] = ['label' => $entity->labels()[1], 'url' => ['index', 'item' => $entity->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin', 'View'), 'url' => ['view', 'entity' => $entity->id, 'id' => $model->primaryKey]];
 $this->params['breadcrumbs'][] = Yii::t('admin', 'Deleting');
 ?>
