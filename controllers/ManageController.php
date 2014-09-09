@@ -76,7 +76,7 @@ class ManageController extends Controller
     {
         $entity = $this->getEntity($entity);
 
-        $query = call_user_func([$entity->model(), 'find']);
+        $query = call_user_func([$entity->getModelName(), 'find']);
         $modelsProvider = new ActiveDataProvider([
             'query' => $query
         ]);

@@ -6,7 +6,6 @@ namespace asdfstudio\admin\base;
 
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\grid\GridView;
 use yii\helpers\Inflector;
@@ -39,10 +38,6 @@ abstract class Entity extends Component
      * @var string Entity Id
      */
     public $id;
-    /**
-     * @var Model's class name
-     */
-    public $modelClass;
     /**
      * @var array Labels
      */
@@ -103,13 +98,33 @@ abstract class Entity extends Component
      * Model's class name
      *
      * ```php
-     *  return vendorname\blog\Post::className();
+     *  return [
+     *      'class' => vendorname\blog\Post::className(),
+     *      'condition' => function($query) { // can be null or callable
+     *          return $query->where('owner_id' => 1);
+     *      }
+     *  ]
      * ```
      *
-     * @return string
-     * @throws InvalidConfigException
+     * @return array
      */
     abstract public function model();
+
+    /**
+     * Return model's name (namespace + class)
+     *
+     * @return array|null
+     */
+    public function getModelName()
+    {
+        $model = $this->model();
+        if (is_array($model) && isset($model['class'])) {
+            return $model['class'];
+        } elseif (is_string($model)) {
+            return $model;
+        }
+        return null;
+    }
 
     /**
      * Class name of form using for update or create operation

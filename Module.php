@@ -130,7 +130,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         $this->entities[$id] = new $entity([
             'id' => $id,
-            'modelClass' => $entity,
         ]);
         $this->entitiesClasses[$entity] = $id;
     }

@@ -54,7 +54,7 @@ abstract class Controller extends WebController
     public function loadModel($entity, $id)
     {
         $entity = $this->getEntity($entity);
-        $modelClass = call_user_func([$entity->modelClass, 'model']);
+        $modelClass = $entity->getModelName();
 
         return call_user_func([$modelClass, 'findOne'], $id);
     }
