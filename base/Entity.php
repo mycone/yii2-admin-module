@@ -100,7 +100,7 @@ abstract class Entity extends Component
      * ```php
      *  return [
      *      'class' => vendorname\blog\Post::className(),
-     *      'condition' => function($query) { // can be null or callable
+     *      'condition' => function($query) { // can be null, array or callable
      *          return $query->where('owner_id' => 1);
      *      }
      *  ]
@@ -124,6 +124,20 @@ abstract class Entity extends Component
             return $model;
         }
         return null;
+    }
+
+    /**
+     * Return model's query conditions
+     *
+     * @return array|callable
+     */
+    public function getModelConditions()
+    {
+        $model = $this->model();
+        if (is_array($model) && isset($model['condition'])) {
+            return $model['condition'];
+        }
+        return [];
     }
 
     /**

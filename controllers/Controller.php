@@ -6,6 +6,7 @@ namespace asdfstudio\admin\controllers;
 
 use asdfstudio\admin\base\Entity;
 use asdfstudio\admin\Module;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\Controller as WebController;
 
@@ -54,8 +55,18 @@ abstract class Controller extends WebController
     public function loadModel($entity, $id)
     {
         $entity = $this->getEntity($entity);
+        /* @var ActiveRecord $modelClass */
         $modelClass = $entity->getModelName();
+        /* @var ActiveQuery $query */
+        $query = call_user_func([$modelClass, 'find']);
+        $condition = $entity->getModelConditions();
+        if (is_callable($condition)) {
+            $query = call_user_func($condition, $query);;
+        } elseif (is_array($condition)) {
+            $query = $query->where($condition);
+        }
+        $query->andWhere([$modelClass::primaryKey()[0] => $id]);
 
-        return call_user_func([$modelClass, 'findOne'], $id);
+        return $query->one();
     }
 }
