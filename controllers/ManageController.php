@@ -6,6 +6,7 @@ namespace asdfstudio\admin\controllers;
 use Yii;
 use yii\base\Event;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -76,7 +77,15 @@ class ManageController extends Controller
     {
         $entity = $this->getEntity($entity);
 
+        /* @var ActiveQuery $query */
         $query = call_user_func([$entity->getModelName(), 'find']);
+        $condition = $entity->getModelConditions();
+        if (is_callable($condition)) {
+            $query = call_user_func($condition, $query);;
+        } elseif (is_array($condition)) {
+            $query = $query->where($condition);
+        }
+
         $modelsProvider = new ActiveDataProvider([
             'query' => $query
         ]);
