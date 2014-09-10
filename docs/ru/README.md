@@ -42,19 +42,21 @@ use common\models\User;
 
 class UserEntity extends Entity
 {
-    public static function labels()
+    public function labels()
     {
         return ['User', 'Users']; // названия, используемые в админке
     }
 
-    public static function slug()
+    public function slug()
     {
         return 'user'; // путь внутри админки. например /admin/manage/user[/<id>[/edit]]
     }
 
-    public static function model()
+    public function model()
     {
-        return User::className(); // класс модели пользователя
+        return [
+            'class' => User::className(); // класс модели пользователя
+        ];
     }
 }
 ```
