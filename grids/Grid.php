@@ -14,11 +14,13 @@ class Grid extends GridView
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init() {
+        if (empty($this->columns)) {
+            $this->columns = $this->columns();
+        }
         $this->columns = array_merge(
-            $this->columns(),
-            $this->actions()
+                $this->columns, 
+                $this->actions()
         );
         parent::init();
     }
