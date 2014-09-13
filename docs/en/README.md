@@ -135,7 +135,7 @@ public function actions()
             'class' => Button::className(),
             'label' => 'Ban',
             'options' => [
-                'class' => 'btn btn-lg btn-danger'
+                'class' => 'btn btn-danger'
             ],
             'action' => 'ban', // declares called method, can be string or callable which will be passed model and form
             'visible' => !$this->model->getIsNewRecord(),
