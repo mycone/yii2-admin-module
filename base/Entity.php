@@ -86,11 +86,11 @@ abstract class Entity extends Component
      *  ];
      * ```
      *
-     * @return array|null
+     * @return array
      */
     public function access()
     {
-        return null;
+        return [];
     }
 
     /**
