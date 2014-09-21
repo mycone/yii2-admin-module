@@ -6,7 +6,6 @@ namespace asdfstudio\admin\base;
 
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
-use yii\base\Model;
 use yii\grid\GridView;
 use yii\helpers\Inflector;
 use ReflectionClass;
