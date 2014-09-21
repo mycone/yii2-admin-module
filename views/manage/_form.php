@@ -19,8 +19,17 @@ $actions = $form->actions();
     <div class="col-md-10">
         <!-- Render fields -->
         <?php foreach($fields as $attribute => $field):?>
-            <?php if (!$field || isset($field['visible']) && !$field['visible']) continue?>
-            <?php echo $form->field($model, $attribute)->widget($field['class'], $field)?>
+            <?php
+            if (!$field || isset($field['visible']) && !$field['visible']) {
+                continue;
+            }
+            $options = [];
+            if (isset($field['fieldOptions'])) {
+                $options = $field['fieldOptions'];
+                unset($field['fieldOptions']);
+            }
+            ?>
+            <?php echo $form->field($model, $attribute, $options)->widget($field['class'], $field)?>
         <?php endforeach?>
     </div>
     <div class="col-md-2">
