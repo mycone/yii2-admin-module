@@ -15,7 +15,7 @@ $actions = $form->actions();
 ?>
 
 <div class="model-form row">
-    <?php $form = ActiveForm::begin()?>
+    <?php $htmlForm = ActiveForm::begin()?>
     <div class="col-md-10">
         <!-- Render fields -->
         <?php foreach($fields as $attribute => $field):?>
@@ -29,7 +29,7 @@ $actions = $form->actions();
                 unset($field['fieldOptions']);
             }
             ?>
-            <?php echo $form->field($model, $attribute, $options)->widget($field['class'], $field)?>
+            <?php echo $htmlForm->field($model, $attribute, $options)->widget($field['class'], $field)?>
         <?php endforeach?>
     </div>
     <div class="col-md-2">
