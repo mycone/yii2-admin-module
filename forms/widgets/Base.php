@@ -4,9 +4,15 @@
 namespace asdfstudio\admin\forms\widgets;
 
 
+use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\widgets\InputWidget;
 
+/**
+ * Class Base
+ * @package asdfstudio\admin\forms\widgets
+ * @property ActiveRecord $model
+ */
 abstract class Base extends InputWidget
 {
     /**
@@ -30,8 +36,9 @@ abstract class Base extends InputWidget
     public function run()
     {
         $res = '';
-        if (is_array($this->model->{$this->attribute})) {
+        if ((is_array($this->model->{$this->attribute}) || $this->appendable) && static::className() !== AppendableList::className()) {
             $values = $this->model->{$this->attribute};
+            $values = array_unique(is_array($values) ? $values : [$values]);
             $last = end($values);
             reset($values);
             foreach ($values as $key => $value) {
