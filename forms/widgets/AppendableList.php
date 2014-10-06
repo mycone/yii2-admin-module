@@ -43,7 +43,7 @@ class AppendableList extends Base
         }
     }
 
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
         return $this->render($this->template, [
             'entity' => $this->entity,

@@ -64,9 +64,9 @@ class Select extends Base
     /**
      * @inheritdoc
      */
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
-        return Html::activeDropDownList($this->model, $this->attribute, $this->items, [
+        return Html::activeDropDownList($this->model, $attribute ? $attribute : $this->attribute, $this->items, [
             'class' => 'form-control',
             'multiple' => $this->multiple,
         ]);

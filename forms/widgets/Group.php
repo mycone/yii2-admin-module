@@ -34,7 +34,7 @@ class Group extends Base
         $this->options['name'] = $this->name;
     }
 
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
         $res = '';
         /* @var Base $field */

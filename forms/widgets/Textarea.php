@@ -27,9 +27,9 @@ class Textarea extends Base
     /**
      * @inheritdoc
      */
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
-        return Html::activeTextarea($this->model, $this->attribute, [
+        return Html::activeTextarea($this->model, $attribute ? $attribute : $this->attribute, [
             'class' => 'form-control',
             'cols' => $this->cols,
             'rows' => $this->rows,
