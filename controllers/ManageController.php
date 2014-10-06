@@ -38,6 +38,9 @@ class ManageController extends Controller
         if ($this->entity === null) {
             throw new NotFoundHttpException();
         }
+        if (Yii::$app->getRequest()->getIsAjax()) {
+            $this->layout = 'modal';
+        }
 
         parent::init();
     }
