@@ -2,9 +2,11 @@
 
 namespace asdfstudio\admin\forms\widgets;
 
+use asdfstudio\admin\components\AdminFormatter;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use asdfstudio\admin\helpers\AdminHelper;
 
@@ -32,6 +34,10 @@ class Select extends Base
      * @var bool
      */
     public $multiple = false;
+    /**
+     * @var bool Allows empty value
+     */
+    public $allowEmpty = false;
 
     /**
      * @inheritdoc
@@ -47,15 +53,20 @@ class Select extends Base
                 $this->items[$i] = AdminHelper::resolveAttribute($this->labelAttribute, $model);
             }
         }
+        if ($this->allowEmpty) {
+            $this->items = ArrayHelper::merge([
+                null => Yii::t('yii', '(not set)')
+            ], $this->items);
+        }
         parent::init();
     }
 
     /**
      * @inheritdoc
      */
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
-        return Html::activeDropDownList($this->model, $this->attribute, $this->items, [
+        return Html::activeDropDownList($this->model, $attribute ? $attribute : $this->attribute, $this->items, [
             'class' => 'form-control',
             'multiple' => $this->multiple,
         ]);

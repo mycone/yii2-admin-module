@@ -6,7 +6,6 @@ namespace asdfstudio\admin\base;
 
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
-use yii\base\Model;
 use yii\grid\GridView;
 use yii\helpers\Inflector;
 use ReflectionClass;
@@ -71,6 +70,27 @@ abstract class Entity extends Component
      */
     public function slug() {
         return Inflector::slug(static::model());
+    }
+
+    /**
+     * Access control rules
+     *
+     * @see [[yii\filters\AccessRule]]
+     * ```php
+     *  return [
+     *      [
+     *          'actions' => ['index', 'view', 'update'],
+     *          'roles' => ['@'],
+     *          'allow' => true,
+     *      ],
+     *  ];
+     * ```
+     *
+     * @return array
+     */
+    public function access()
+    {
+        return [];
     }
 
     /**

@@ -22,10 +22,11 @@ class Input extends Base
     /**
      * @inheritdoc
      */
-    public function renderWidget()
+    public function renderInput($value, $attribute = null)
     {
-        return Html::activeInput($this->type, $this->model, $this->attribute, [
+        return Html::activeInput($this->type, $this->model, $attribute ? $attribute : $this->attribute, [
             'class' => 'form-control',
+            'value' => $value,
         ]);
     }
 }

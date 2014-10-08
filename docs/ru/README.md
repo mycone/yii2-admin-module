@@ -135,7 +135,7 @@ public function actions()
             'class' => Button::className(),
             'label' => 'Забанить',
             'options' => [
-                'class' => 'btn btn-lg btn-danger'
+                'class' => 'btn btn-danger'
             ],
             'action' => 'ban', // указывается вызываемый метод, может быть как строкой, так и функцией, в которую будет передана модель и форма
             'visible' => !$this->model->getIsNewRecord(),

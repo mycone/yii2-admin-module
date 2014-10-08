@@ -10,6 +10,7 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use asdfstudio\admin\base\Entity;
 use asdfstudio\admin\forms\Form;
@@ -17,13 +18,32 @@ use asdfstudio\admin\forms\Form;
 /**
  * Class ManageController
  * @package asdfstudio\admin\controllers
+ * @property ActiveRecord $model
  */
 class ManageController extends Controller
 {
     /* @var Entity */
     public $entity;
     /* @var ActiveRecord */
-    public $model;
+    private $_model = null;
+
+    /**
+     * @inheritdoc
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function init()
+    {
+        $entity = Yii::$app->getRequest()->getQueryParam('entity', null);
+        $this->entity = $this->getEntity($entity);
+        if ($this->entity === null) {
+            throw new NotFoundHttpException();
+        }
+        if (Yii::$app->getRequest()->getIsAjax()) {
+            $this->layout = 'modal';
+        }
+
+        parent::init();
+    }
 
     /**
      * @inheritdoc
@@ -45,32 +65,6 @@ class ManageController extends Controller
                 ],
             ],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeAction($action)
-    {
-        if (parent::beforeAction($action)) {
-            $entity = Yii::$app->getRequest()->getQueryParam('entity', null);
-            $this->entity = $this->getEntity($entity);
-            if ($this->entity === null) {
-                throw new NotFoundHttpException();
-            }
-
-            if (!in_array($action->id, ['index', 'create'])) {
-                $id = Yii::$app->getRequest()->getQueryParam('id', null);
-
-                $this->model = $this->loadModel($entity, $id);
-                if ($this->model === null) {
-                    throw new NotFoundHttpException();
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function actionIndex($entity)
@@ -191,5 +185,51 @@ class ManageController extends Controller
             'model' => $model,
             'form' => $form,
         ]);
+    }
+
+    /**
+     * @throws \yii\web\NotFoundHttpException
+     * @throws \yii\web\BadRequestHttpException
+     * @return ActiveRecord
+     */
+    public function getModel()
+    {
+        $entity = $this->entity;
+        $id = Yii::$app->getRequest()->getQueryParam('id', null);
+        if (!$id || !$entity) {
+            throw new BadRequestHttpException();
+        }
+        $model = $this->loadModel($entity, $id);
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+        return $model;
+    }
+
+    /**
+     * Load model
+     * @param Entity $entity
+     * @param string|integer $id
+     * @return ActiveRecord mixed
+     */
+    public function loadModel($entity, $id)
+    {
+        if ($this->_model) {
+            return $this->_model;
+        }
+        /* @var ActiveRecord $modelClass */
+        $modelClass = $entity->getModelName();
+        /* @var ActiveQuery $query */
+        $query = call_user_func([$modelClass, 'find']);
+        $condition = $entity->getModelConditions();
+        if (is_callable($condition)) {
+            $query = call_user_func($condition, $query);;
+        } elseif (is_array($condition)) {
+            $query = $query->where($condition);
+        }
+        $query->andWhere([$modelClass::primaryKey()[0] => $id]);
+
+        $this->_model = $query->one();
+        return $this->_model;
     }
 }

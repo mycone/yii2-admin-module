@@ -45,28 +45,4 @@ abstract class Controller extends WebController
         }
         return null;
     }
-
-    /**
-     * Load model
-     * @param string $entity
-     * @param string|integer $id
-     * @return ActiveRecord mixed
-     */
-    public function loadModel($entity, $id)
-    {
-        $entity = $this->getEntity($entity);
-        /* @var ActiveRecord $modelClass */
-        $modelClass = $entity->getModelName();
-        /* @var ActiveQuery $query */
-        $query = call_user_func([$modelClass, 'find']);
-        $condition = $entity->getModelConditions();
-        if (is_callable($condition)) {
-            $query = call_user_func($condition, $query);;
-        } elseif (is_array($condition)) {
-            $query = $query->where($condition);
-        }
-        $query->andWhere([$modelClass::primaryKey()[0] => $id]);
-
-        return $query->one();
-    }
 }
