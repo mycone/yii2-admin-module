@@ -12,7 +12,7 @@ class AppendableList extends Base
 {
     /**
      * Query for load all items
-     * @var ActiveQuery
+     * @var ActiveQuery|callable
      */
     public $query;
     /**
@@ -45,11 +45,12 @@ class AppendableList extends Base
 
     public function renderInput($value, $attribute = null)
     {
+        $query = is_callable($this->query) ? call_user_func($this->query, $this->model): $this->query;
         return $this->render($this->template, [
             'entity' => $this->entity,
             'columns' => $this->columns,
             'dataProvider' => new ActiveDataProvider([
-                'query' => $this->query,
+                'query' => $query,
             ]),
         ]);
     }
