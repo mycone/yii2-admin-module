@@ -44,6 +44,9 @@ class Select extends Base
      */
     public function init()
     {
+        if (is_callable($this->query)) {
+            $this->query = call_user_func($this->query, $this->model);
+        }
         if ($this->query instanceof ActiveQuery) {
             if (!$this->labelAttribute) {
                 throw new InvalidConfigException('Parameter "labelAttribute" is required');
