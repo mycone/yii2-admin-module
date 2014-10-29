@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\db\ActiveRecord $model
- * @var yii\widgets\ActiveForm $form
+ * @var asdfstudio\admin\forms\Form $form
  * @var asdfstudio\admin\base\Entity $entity
  * @var ActiveForm|\asdfstudio\admin\forms\Form $form
  */
