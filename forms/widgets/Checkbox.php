@@ -26,7 +26,7 @@ class Checkbox extends Base
     {
         return Html::activeCheckbox($this->model, $attribute ? $attribute : $this->attribute, [
             'style' => 'float: left; margin-right: 4px;', // ugly hack
-            'value' => $value,
+            'checked' => $value,
             'label' => null,
         ]);
     }
