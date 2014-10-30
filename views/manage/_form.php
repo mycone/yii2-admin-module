@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\db\ActiveRecord $model
- * @var yii\widgets\ActiveForm $form
+ * @var asdfstudio\admin\forms\Form $form
  * @var asdfstudio\admin\base\Entity $entity
  * @var ActiveForm|\asdfstudio\admin\forms\Form $form
  */
@@ -15,7 +15,9 @@ $actions = $form->actions();
 ?>
 
 <div class="model-form row">
-    <?php $htmlForm = ActiveForm::begin()?>
+    <?php $htmlForm = ActiveForm::begin([
+        'options' => $form->options,
+    ])?>
     <div class="col-md-10">
         <!-- Render fields -->
         <?php foreach($fields as $attribute => $field):?>

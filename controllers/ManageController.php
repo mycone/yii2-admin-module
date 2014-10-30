@@ -108,12 +108,15 @@ class ManageController extends Controller
         if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             $form->runActions();
-            if ($form->model->validate()) {
+            $form->beforeSave();
+            if ($form->model->validate()) {;
                 if ($form->model->save()) {
+                    $form->afterSave();
                     $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
                 } else {
+                    $form->afterFail();
                     $this->module->trigger(Entity::EVENT_UPDATE_FAIL, new Event([
                         'sender' => $form->model,
                     ]));
@@ -161,8 +164,10 @@ class ManageController extends Controller
 
         if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
+            $form->beforeSave();
             if ($form->model->validate()) {
                 if ($form->model->save()) {
+                    $form->afterSave();
                     $this->module->trigger(Entity::EVENT_CREATE_SUCCESS, new Event([
                         'sender' => $form->model,
                     ]));
@@ -173,6 +178,7 @@ class ManageController extends Controller
                         'id' => $form->model->primaryKey,
                     ]);
                 } else {
+                    $form->afterFail();
                     $this->module->trigger(Entity::EVENT_CREATE_FAIL, new Event([
                         'sender' => $form->model,
                     ]));
