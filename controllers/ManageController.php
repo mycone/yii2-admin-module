@@ -108,8 +108,8 @@ class ManageController extends Controller
         if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
             $form->runActions();
-            if ($form->model->validate()) {
-                $form->beforeSave();
+            $form->beforeSave();
+            if ($form->model->validate()) {;
                 if ($form->model->save()) {
                     $form->afterSave();
                     $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
@@ -164,8 +164,8 @@ class ManageController extends Controller
 
         if (Yii::$app->getRequest()->getIsPost()) {
             $form->load(Yii::$app->getRequest()->getBodyParams());
+            $form->beforeSave();
             if ($form->model->validate()) {
-                $form->beforeSave();
                 if ($form->model->save()) {
                     $form->afterSave();
                     $this->module->trigger(Entity::EVENT_CREATE_SUCCESS, new Event([
