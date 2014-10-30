@@ -15,7 +15,9 @@ $actions = $form->actions();
 ?>
 
 <div class="model-form row">
-    <?php $htmlForm = ActiveForm::begin()?>
+    <?php $htmlForm = ActiveForm::begin([
+        'options' => $form->options,
+    ])?>
     <div class="col-md-10">
         <!-- Render fields -->
         <?php foreach($fields as $attribute => $field):?>

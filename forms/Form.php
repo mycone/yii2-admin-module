@@ -31,6 +31,10 @@ class Form extends Model
      * View file
      */
     public $viewFile = null;
+    /**
+     * Html form options
+     */
+    public $options = [];
 
     /**
      * List of model fields displayed in form
