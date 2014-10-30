@@ -147,4 +147,19 @@ class Form extends Model
         }
         return true;
     }
+
+    /**
+     * Triggers before form saving model
+     */
+    public function beforeSave() {}
+
+    /**
+     * Triggers after model saved
+     */
+    public function afterSave() {}
+
+    /**
+     * Triggers after model's saving fails
+     */
+    public function afterFail() {}
 }
