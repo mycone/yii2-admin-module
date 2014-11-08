@@ -27,11 +27,11 @@ abstract class Base extends InputWidget
     public $disabled = false;
 
     /**
-     * @param $attribute string
      * @param $value string
+     * @param $attribute string
      * @return string
      */
-    abstract public function renderInput($attribute, $value);
+    abstract public function renderInput($value, $attribute);
 
     public function run()
     {
