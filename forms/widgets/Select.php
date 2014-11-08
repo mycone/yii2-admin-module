@@ -2,7 +2,6 @@
 
 namespace asdfstudio\admin\forms\widgets;
 
-use asdfstudio\admin\components\AdminFormatter;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
