@@ -201,7 +201,7 @@ class ManageController extends Controller
     public function getModel()
     {
         $entity = $this->entity;
-        $id = Yii::$app->getRequest()->getQueryParam($entity->primaryKey(), null);
+        $id = Yii::$app->getRequest()->getQueryParam('id', null);
         if (!$id || !$entity) {
             throw new BadRequestHttpException();
         }
