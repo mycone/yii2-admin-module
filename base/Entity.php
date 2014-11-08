@@ -43,6 +43,18 @@ abstract class Entity extends Component
     public $labels;
 
     /**
+     * Primary key for model. MUST be unique.
+     * Using for loading model from DB and URL generation.
+     * Default is `id`
+     *
+     * @return string
+     */
+    public function primaryKey()
+    {
+        return 'id';
+    }
+
+    /**
      * Should return an array with single and plural form of model name, e.g.
      *
      * ```php
