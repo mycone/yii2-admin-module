@@ -95,12 +95,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function bootstrap($app)
     {
         $this->registerRoutes([
-            $this->urlPrefix . ''                                             => 'admin/admin/index',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>'                   => 'admin/manage/index',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/create'            => 'admin/manage/create',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\d]+>'        => 'admin/manage/view',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\d]+>/update' => 'admin/manage/update',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\d]+>/delete' => 'admin/manage/delete',
+            $this->urlPrefix . ''                                               => 'admin/admin/index',
+            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>'                     => 'admin/manage/index',
+            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/create'              => 'admin/manage/create',
+            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>'        => 'admin/manage/view',
+            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>/update' => 'admin/manage/update',
+            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>/delete' => 'admin/manage/delete',
         ]);
 
         $this->registerTranslations();
