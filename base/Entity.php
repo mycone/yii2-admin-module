@@ -136,7 +136,7 @@ abstract class Entity extends Component
         if (is_array($model) && isset($model['condition'])) {
             return $model['condition'];
         }
-        return [];
+        return null;
     }
 
     /**
