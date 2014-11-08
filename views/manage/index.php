@@ -14,6 +14,8 @@ $this->title = $entity->labels()[1];
 $this->params['breadcrumbs'][] = $this->title;
 
 $grid = $entity->grid();
+$grid['entity'] = $entity;
+
 $class = ArrayHelper::remove($grid, 'class', Grid::className());
 $defaultGrid = [
     'dataProvider' => $modelsProvider,

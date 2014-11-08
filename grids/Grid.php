@@ -4,6 +4,7 @@
 namespace asdfstudio\admin\grids;
 
 
+use asdfstudio\admin\base\Entity;
 use Yii;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
@@ -11,6 +12,13 @@ use yii\helpers\Html;
 
 class Grid extends GridView
 {
+    /**
+     * Current entity
+     *
+     * @var Entity
+     */
+    public $entity = null;
+
     /**
      * @inheritdoc
      */
@@ -49,28 +57,29 @@ class Grid extends GridView
     public function actions()
     {
         $entity = \Yii::$app->getRequest()->getQueryParam('entity', null);
+        $primaryKey = $this->entity->primaryKey();
         return [
             [
                 'class' => ActionColumn::className(),
                 'buttons' => [
-                    'view' => function($url, $model, $key) use ($entity) {
+                    'view' => function($url, $model, $key) use ($entity, $primaryKey) {
                         return Html::a(
                             Yii::t('admin', 'View'),
-                            ['manage/view', 'entity' => $entity, 'id' => $model->id],
+                            ['manage/view', 'entity' => $entity, 'id' => $model->{$primaryKey}],
                             ['class' => 'btn btn-primary']
                         );
                     },
-                    'update' => function($url, $model, $key) use ($entity) {
+                    'update' => function($url, $model, $key) use ($entity, $primaryKey) {
                         return Html::a(
                             Yii::t('admin', 'Edit'),
-                            ['manage/update', 'entity' => $entity, 'id' => $model->id],
+                            ['manage/update', 'entity' => $entity, 'id' => $model->{$primaryKey}],
                             ['class' => 'btn btn-warning']
                         );
                     },
-                    'delete' => function($url, $model, $key) use ($entity) {
+                    'delete' => function($url, $model, $key) use ($entity, $primaryKey) {
                         return Html::a(
                             Yii::t('admin', 'Delete'),
-                            ['manage/delete', 'entity' => $entity, 'id' => $model->id],
+                            ['manage/delete', 'entity' => $entity, 'id' => $model->{$primaryKey}],
                             ['class' => 'btn btn-danger', 'data' => [
                                 'confirm' => Yii::t('admin', 'Are you sure you want to delete this item?'),
                                 'method' => 'post',

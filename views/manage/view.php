@@ -23,12 +23,13 @@ $defaultDetail = [
     ],
 ];
 $detail = ArrayHelper::merge($defaultDetail, $detail);
+$primaryKey = $entity->primaryKey();
 ?>
 <div class="model-view">
     <p>
-        <?= Html::a(Yii::t('admin', 'Edit'), ['update', 'entity' => $entity->id, 'id' => $model->primaryKey], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('admin', 'Edit'), ['update', 'entity' => $entity->id, 'id' => $model->{$primaryKey}], ['class' => 'btn btn-primary']) ?>
         <?=
-        Html::a(Yii::t('admin', 'Delete'), ['delete', 'entity' => $entity->id, 'id' => $model->primaryKey], [
+        Html::a(Yii::t('admin', 'Delete'), ['delete', 'entity' => $entity->id, 'id' => $model->{$primaryKey}], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('admin', 'Are you sure you want to delete this item?'),
