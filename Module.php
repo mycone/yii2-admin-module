@@ -31,6 +31,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var array
      */
     public $entitiesClasses = [];
+    /**
+     * Asset bundle
+     * @var string
+     */
+    public $assetBundle = 'asdfstudio\admin\AdminAsset';
 
     /**
      * Top menu navigation

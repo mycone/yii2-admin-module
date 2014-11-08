@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use asdfstudio\admin\AdminAsset;
 use frontend\widgets\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -11,7 +10,8 @@ use yii\helpers\Url;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-AdminAsset::register($this);
+$assetBundle = Yii::$app->controller->module->assetBundle;
+$assetBundle::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
