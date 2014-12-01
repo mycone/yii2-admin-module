@@ -15,8 +15,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $grid = $entity->grid();
 $class = ArrayHelper::remove($grid, 'class', Grid::className());
+$filterModel = ArrayHelper::remove($grid, 'filterModel', null);
+if ($filterModel !== null) {
+    $modelsProvider = $filterModel->search(\Yii::$app->request->queryParams);
+}
 $defaultGrid = [
     'dataProvider' => $modelsProvider,
+    'filterModel' => $filterModel,
     'formatter' => [
         'class' => AdminFormatter::className(),
     ],
