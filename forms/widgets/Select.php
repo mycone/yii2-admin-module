@@ -66,6 +66,8 @@ class Select extends Base
      */
     public function renderInput($value, $attribute = null)
     {
+        $select_id = Html::getInputId($this->model, $attribute ? $attribute : $this->attribute);
+        $this->view->registerJs("$('#{$select_id}').selectpicker();");
         return Html::activeDropDownList($this->model, $attribute ? $attribute : $this->attribute, $this->items, [
             'class' => 'form-control',
             'multiple' => $this->multiple,
