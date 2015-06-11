@@ -160,7 +160,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $i18n->translations['admin'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en',
-            'basePath' => '@vendor/asdf-studio/yii2-admin-module/messages',
+            'basePath' => '@vendor/sgdot/yii2-admin-module/messages',
         ];
     }
 }

@@ -15,7 +15,7 @@ use yii\web\AssetBundle;
  */
 class AdminAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/asdf-studio/yii2-admin-module/assets';
+    public $sourcePath = '@vendor/sgdot/yii2-admin-module/assets';
     public $css = [
         'css/sb-admin.css',
     ];
