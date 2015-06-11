@@ -2,10 +2,9 @@
 
 namespace asdfstudio\admin\forms\widgets;
 
-use asdfstudio\admin\components\AdminFormatter;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\db\ActiveQuery;
+use yii\db\ActiveQueryInterface;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use asdfstudio\admin\helpers\AdminHelper;
@@ -19,7 +18,7 @@ use asdfstudio\admin\helpers\AdminHelper;
 class Select extends Base
 {
     /**
-     * @var ActiveQuery|array
+     * @var ActiveQueryInterface|array
      */
     public $query;
     /**
@@ -47,7 +46,7 @@ class Select extends Base
         if (is_callable($this->query)) {
             $this->query = call_user_func($this->query, $this->model);
         }
-        if ($this->query instanceof ActiveQuery) {
+        if ($this->query instanceof ActiveQueryInterface) {
             if (!$this->labelAttribute) {
                 throw new InvalidConfigException('Parameter "labelAttribute" is required');
             }
@@ -69,6 +68,8 @@ class Select extends Base
      */
     public function renderInput($value, $attribute = null)
     {
+        $select_id = Html::getInputId($this->model, $attribute ? $attribute : $this->attribute);
+        $this->view->registerJs("$('#{$select_id}').selectpicker();");
         return Html::activeDropDownList($this->model, $attribute ? $attribute : $this->attribute, $this->items, [
             'class' => 'form-control',
             'multiple' => $this->multiple,

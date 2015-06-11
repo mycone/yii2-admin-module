@@ -16,7 +16,7 @@ class AccessControl extends \yii\filters\AccessControl
         if ($this->entity) {
             $this->rules = array_merge(
                 $this->entity
-            )
+            );
         }
         parent::init();
     }

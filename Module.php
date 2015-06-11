@@ -31,6 +31,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var array
      */
     public $entitiesClasses = [];
+    /**
+     * Asset bundle
+     * @var string
+     */
+    public $assetBundle = 'asdfstudio\admin\AdminAsset';
 
     /**
      * Top menu navigation
@@ -155,7 +160,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $i18n->translations['admin'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en',
-            'basePath' => '@vendor/asdf-studio/yii2-admin-module/messages',
+            'basePath' => '@vendor/sgdot/yii2-admin-module/messages',
         ];
     }
 }

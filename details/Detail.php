@@ -14,7 +14,7 @@ class Detail extends DetailView
     public function init()
     {
         if (empty($this->attributes)) {
-            $this->attributes = $this->attributes = $this->attributes();
+            $this->attributes = $this->attributes();
         }
         parent::init();
     }

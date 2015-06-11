@@ -1,10 +1,9 @@
 <?php
-use asdfstudio\admin\AdminAsset;
-
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-AdminAsset::register($this);
+$assetBundle = Yii::$app->controller->module->assetBundle;
+$assetBundle::register($this);
 ?>
 <div class="container-fluid" style="padding: 20px">
     <!-- Page Heading -->

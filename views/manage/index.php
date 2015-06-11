@@ -17,8 +17,13 @@ $grid = $entity->grid();
 $grid['entity'] = $entity;
 
 $class = ArrayHelper::remove($grid, 'class', Grid::className());
+$filterModel = ArrayHelper::remove($grid, 'filterModel', null);
+if ($filterModel !== null && method_exists($filterModel, 'search')) {
+    $modelsProvider = $filterModel->search(\Yii::$app->request->queryParams);
+}
 $defaultGrid = [
     'dataProvider' => $modelsProvider,
+    'filterModel' => $filterModel,
     'formatter' => [
         'class' => AdminFormatter::className(),
     ],
