@@ -77,7 +77,7 @@ class ManageController extends Controller
         if (is_callable($condition)) {
             $query = call_user_func($condition, $query);;
         } elseif (is_array($condition)) {
-            $query = $query->where($condition);
+            $query = $query->andWhere($condition);
         }
 
         $modelsProvider = new ActiveDataProvider([
