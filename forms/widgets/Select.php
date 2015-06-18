@@ -62,7 +62,16 @@ class Select extends Base
         }
         parent::init();
     }
-
+    public function run() 
+    {
+        if (!$this->multiple) {
+            return parent::run();
+        } else {
+            $input = $this->renderInput($this->model->{$this->attribute}, $this->attribute);
+            $res = $this->appendable ? $this->wrapAppendable($input) : $input;
+        }
+        return $res;
+    }
     /**
      * @inheritdoc
      */
