@@ -1,6 +1,5 @@
 <?php
 
-
 namespace asdfstudio\admin\controllers;
 
 use Yii;
@@ -14,15 +13,16 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use asdfstudio\admin\base\Entity;
 use asdfstudio\admin\forms\Form;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Class ManageController
  * @package asdfstudio\admin\controllers
  * @property ActiveRecord $model
  */
-class ManageController extends Controller
-{
+class ManageController extends Controller {
     /* @var Entity */
+
     public $entity;
     /* @var ActiveRecord */
     private $_model = null;
@@ -31,8 +31,7 @@ class ManageController extends Controller
      * @inheritdoc
      * @throws \yii\web\NotFoundHttpException
      */
-    public function init()
-    {
+    public function init() {
         $entity = Yii::$app->getRequest()->getQueryParam('entity', null);
         $this->entity = $this->getEntity($entity);
         if ($this->entity === null) {
@@ -48,8 +47,7 @@ class ManageController extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -67,39 +65,39 @@ class ManageController extends Controller
         ];
     }
 
-    public function actionIndex($entity)
-    {
+    public function actionIndex($entity) {
         $entity = $this->getEntity($entity);
+        if (method_exists($entity, 'canRead') && $entity->canRead()) {
+            /* @var ActiveQuery $query */
+            $query = call_user_func([$entity->getModelName(), 'find']);
+            $condition = $entity->getModelConditions();
+            if (is_callable($condition)) {
+                $query = call_user_func($condition, $query);
+            } elseif (is_array($condition)) {
+                $query = $query->andWhere($condition);
+            }
 
-        /* @var ActiveQuery $query */
-        $query = call_user_func([$entity->getModelName(), 'find']);
-        $condition = $entity->getModelConditions();
-        if (is_callable($condition)) {
-            $query = call_user_func($condition, $query);;
-        } elseif (is_array($condition)) {
-            $query = $query->andWhere($condition);
+            $modelsProvider = new ActiveDataProvider([
+                'query' => $query
+            ]);
+
+            return $this->render('index', [
+                'entity' => $entity,
+                'modelsProvider' => $modelsProvider,
+            ]);
+        } else {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
         }
-
-        $modelsProvider = new ActiveDataProvider([
-            'query' => $query
-        ]);
-
-        return $this->render('index', [
-            'entity' => $entity,
-            'modelsProvider' => $modelsProvider,
-        ]);
     }
 
-    public function actionView()
-    {
+    public function actionView() {
         return $this->render('view', [
             'entity' => $this->entity,
             'model' => $this->model,
         ]);
     }
 
-    public function actionUpdate()
-    {
+    public function actionUpdate() {
         /* @var Form $form */
         $form = Yii::createObject(ArrayHelper::merge([
             'model' => $this->model,
@@ -109,7 +107,8 @@ class ManageController extends Controller
             $form->load(Yii::$app->getRequest()->getBodyParams());
             $form->runActions();
             $form->beforeSave();
-            if ($form->model->validate()) {;
+            if ($form->model->validate()) {
+                ;
                 if ($form->model->save()) {
                     $form->afterSave();
                     $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
@@ -130,8 +129,7 @@ class ManageController extends Controller
         ]);
     }
 
-    public function actionDelete()
-    {
+    public function actionDelete() {
         if (Yii::$app->getRequest()->getIsPost()) {
             $transaction = Yii::$app->db->beginTransaction();
             if ($this->model->delete()) {
@@ -154,8 +152,7 @@ class ManageController extends Controller
         ]);
     }
 
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = Yii::createObject($this->entity->model(), []);
         /* @var Form $form */
         $form = Yii::createObject(ArrayHelper::merge([
@@ -198,8 +195,7 @@ class ManageController extends Controller
      * @throws \yii\web\BadRequestHttpException
      * @return ActiveRecord
      */
-    public function getModel()
-    {
+    public function getModel() {
         $entity = $this->entity;
         $id = Yii::$app->getRequest()->getQueryParam('id', null);
         if (!$id || !$entity) {
@@ -218,8 +214,7 @@ class ManageController extends Controller
      * @param string|integer $id
      * @return ActiveRecord mixed
      */
-    public function loadModel($entity, $id)
-    {
+    public function loadModel($entity, $id) {
         if ($this->_model) {
             return $this->_model;
         }
@@ -231,7 +226,7 @@ class ManageController extends Controller
 
         $condition = $entity->getModelConditions();
         if (is_callable($condition)) {
-            $query = call_user_func($condition, $query);;
+            $query = call_user_func($condition, $query);
         } elseif (is_array($condition)) {
             $query = $query->andWhere($condition);
         }
@@ -239,4 +234,5 @@ class ManageController extends Controller
         $this->_model = $query->one();
         return $this->_model;
     }
+
 }
