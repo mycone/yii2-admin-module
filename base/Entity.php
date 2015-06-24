@@ -1,8 +1,6 @@
 <?php
 
-
 namespace asdfstudio\admin\base;
-
 
 use asdfstudio\admin\forms\Form;
 use yii\base\Component;
@@ -15,28 +13,31 @@ use yii\widgets\DetailView;
  * Class Entity
  * @package asdfstudio\admin
  */
-abstract class Entity extends Component
-{
+abstract class Entity extends Component {
+
     /**
      * Triggers after new model creation
      */
-    const EVENT_CREATE_SUCCESS  = 'entity_create_success';
-    const EVENT_CREATE_FAIL     = 'entity_create_fail';
+    const EVENT_CREATE_SUCCESS = 'entity_create_success';
+    const EVENT_CREATE_FAIL = 'entity_create_fail';
+
     /**
      * Trigers after model updated
      */
-    const EVENT_UPDATE_SUCCESS  = 'entity_update_success';
-    const EVENT_UPDATE_FAIL     = 'entity_update_fail';
+    const EVENT_UPDATE_SUCCESS = 'entity_update_success';
+    const EVENT_UPDATE_FAIL = 'entity_update_fail';
+
     /**
      * Triggers after model deleted
      */
-    const EVENT_DELETE_SUCCESS  = 'entity_delete_success';
-    const EVENT_DELETE_FAIL     = 'entity_delete_fail';
+    const EVENT_DELETE_SUCCESS = 'entity_delete_success';
+    const EVENT_DELETE_FAIL = 'entity_delete_fail';
 
     /**
      * @var string Entity Id
      */
     public $id;
+
     /**
      * @var array Labels
      */
@@ -49,8 +50,7 @@ abstract class Entity extends Component
      *
      * @return string
      */
-    public function primaryKey()
-    {
+    public function primaryKey() {
         return 'id';
     }
 
@@ -100,8 +100,7 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public function access()
-    {
+    public function access() {
         return [];
     }
 
@@ -126,8 +125,7 @@ abstract class Entity extends Component
      *
      * @return array|null
      */
-    public function getModelName()
-    {
+    public function getModelName() {
         $model = $this->model();
         if (is_array($model) && isset($model['class'])) {
             return $model['class'];
@@ -142,8 +140,7 @@ abstract class Entity extends Component
      *
      * @return array|callable
      */
-    public function getModelConditions()
-    {
+    public function getModelConditions() {
         $model = $this->model();
         if (is_array($model) && isset($model['condition'])) {
             return $model['condition'];
@@ -164,8 +161,7 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public function form()
-    {
+    public function form() {
         return [
             'class' => Form::className(),
         ];
@@ -184,8 +180,7 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public function detail()
-    {
+    public function detail() {
         return [
             'class' => DetailView::className(),
         ];
@@ -204,10 +199,26 @@ abstract class Entity extends Component
      *
      * @return array
      */
-    public function grid()
-    {
+    public function grid() {
         return [
             'class' => GridView::className(),
         ];
     }
+
+    public function canRead() {
+        return true;
+    }
+
+    public function canCreate() {
+        return true;
+    }
+
+    public function canUpdate() {
+        return true;
+    }
+
+    public function canDelete() {
+        return true;
+    }
+
 }
