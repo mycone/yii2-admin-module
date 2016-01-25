@@ -22,11 +22,11 @@ class Input extends Base
     /**
      * @inheritdoc
      */
-    public function renderInput($value, $attribute = null)
-    {
-        return Html::activeInput($this->type, $this->model, $attribute ? $attribute : $this->attribute, [
-            'class' => 'form-control',
-            'value' => $value,
-        ]);
+    public function renderInput($value, $attribute = null) {
+        Html::addCssClass($this->options, 'form-control');
+        if (!isset($this->options['value'])) {
+            $this->options['value'] = $value;
+        }
+        return Html::activeInput($this->type, $this->model, $attribute ? $attribute : $this->attribute, $this->options);
     }
 }
