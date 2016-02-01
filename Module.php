@@ -17,24 +17,28 @@ class Module extends \yii\base\Module implements BootstrapInterface {
 
     /**
      * URL prefix
+     *
      * @var string
      */
     public $urlPrefix = '/admin';
 
     /**
      * Registered models
+     *
      * @var array
      */
     public $entities = [];
 
     /**
      * Contains Class => Id for fast search
+     *
      * @var array
      */
     public $entitiesClasses = [];
 
     /**
      * Asset bundle
+     *
      * @var string
      */
     public $assetBundle = 'asdfstudio\admin\AdminAsset';
@@ -57,6 +61,7 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      *          ]
      *      ]
      *  ]
+     *
      * @var Menu
      */
     public $menu;
@@ -92,7 +97,7 @@ class Module extends \yii\base\Module implements BootstrapInterface {
         parent::init();
         $this->setViewPath(dirname(__FILE__) . '/views');
 
-        $this->menu = new Menu();
+        $this->menu    = new Menu();
         $this->sidebar = new Menu();
     }
 
@@ -101,12 +106,13 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      */
     public function bootstrap($app) {
         $this->registerRoutes([
-            $this->urlPrefix . '' => 'admin/admin/index',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>' => 'admin/manage/index',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/create' => 'admin/manage/create',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>' => 'admin/manage/view',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>/update' => 'admin/manage/update',
-            $this->urlPrefix . '/manage/<entity:[\w\d-_]+>/<id:[\w\d]+>/delete' => 'admin/manage/delete',
+            $this->urlPrefix . ''                                                     => 'admin/admin/index',
+            $this->urlPrefix . '/manage/<entity:[\w\d\._-]+>'                         => 'admin/manage/index',
+            $this->urlPrefix . '/manage/<entity:[\w\d\._-]+>/create'                  => 'admin/manage/create',
+            $this->urlPrefix . '/manage/<entity:[\w\d\._-]+>/<id:[\w\d\._-]+>'        => 'admin/manage/view',
+            $this->urlPrefix . '/manage/<entity:[\w\d\._-]+>/<id:[\w\d\._-]+>/update' => 'admin/manage/update',
+            $this->urlPrefix . '/manage/<entity:[\w\d\._-]+>/<id:[\w\d\._-]+>/delete' => 'admin/manage/delete',
+
         ]);
 
         $this->registerTranslations();
@@ -121,8 +127,10 @@ class Module extends \yii\base\Module implements BootstrapInterface {
 
     /**
      * Register model in admin dashboard
+     *
      * @param string|Entity $entity
-     * @param bool $forceRegister
+     * @param bool          $forceRegister
+     *
      * @throws \yii\base\InvalidConfigException
      */
     public function registerEntity($entity, $forceRegister = false) {
@@ -132,7 +140,7 @@ class Module extends \yii\base\Module implements BootstrapInterface {
             throw new InvalidConfigException(sprintf('Item with id "%s" already registered', $id));
         }
 
-        $this->entities[$id] = new $entity([
+        $this->entities[$id]            = new $entity([
             'id' => $id,
         ]);
         $this->entitiesClasses[$entity] = $id;
@@ -140,6 +148,7 @@ class Module extends \yii\base\Module implements BootstrapInterface {
 
     /**
      * Register controller in module. Needed for creating custom pages
+     *
      * @param string $id
      * @param string $controller
      */
@@ -153,11 +162,11 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      * Register translations
      */
     protected function registerTranslations() {
-        $i18n = Yii::$app->i18n;
+        $i18n                        = Yii::$app->i18n;
         $i18n->translations['admin'] = [
-            'class' => 'yii\i18n\PhpMessageSource',
+            'class'          => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en',
-            'basePath' => '@vendor/sgdot/yii2-admin-module/messages',
+            'basePath'       => '@vendor/sgdot/yii2-admin-module/messages',
         ];
     }
 
