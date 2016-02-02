@@ -14,6 +14,9 @@ use yii\helpers\Html;
 
 class ActionColumn extends \yii\grid\ActionColumn {
 
+    /**
+     * @inheritdoc
+     */
     protected function initDefaultButtons() {
 
         $entity     = Yii::$app->getRequest()->getQueryParam('entity', null);

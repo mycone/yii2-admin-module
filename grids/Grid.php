@@ -16,6 +16,9 @@ class Grid extends GridView {
         if (empty($this->columns)) {
             $this->columns = $this->columns();
         }
+        if (!isset($this->columns['actions'])) {
+            $this->columns['actions'] = ['class' => 'asdfstudio\admin\grids\ActionColumn'];
+        }
         parent::init();
     }
 
