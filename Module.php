@@ -120,6 +120,8 @@ class Module extends \yii\base\Module implements BootstrapInterface {
 
     /**
      * Register admin module routes
+     *
+     * @param array $rules
      */
     public function registerRoutes($rules) {
         Yii::$app->getUrlManager()->addRules($rules);
@@ -140,9 +142,10 @@ class Module extends \yii\base\Module implements BootstrapInterface {
             throw new InvalidConfigException(sprintf('Item with id "%s" already registered', $id));
         }
 
-        $this->entities[$id]            = new $entity([
+        $this->entities[$id] = new $entity([
             'id' => $id,
         ]);
+
         $this->entitiesClasses[$entity] = $id;
     }
 
@@ -162,7 +165,8 @@ class Module extends \yii\base\Module implements BootstrapInterface {
      * Register translations
      */
     protected function registerTranslations() {
-        $i18n                        = Yii::$app->i18n;
+        $i18n = Yii::$app->i18n;
+
         $i18n->translations['admin'] = [
             'class'          => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en',
