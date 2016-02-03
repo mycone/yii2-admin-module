@@ -106,14 +106,13 @@ class ManageController extends Controller {
             /* @var Form $form */
             $form = Yii::createObject(ArrayHelper::merge([
                 'model' => $this->model,
-            ], $this->entity->form('update')));
+            ], $this->entity->form()));
 
             if (Yii::$app->getRequest()->getIsPost()) {
                 $form->load(Yii::$app->getRequest()->getBodyParams());
                 $form->runActions();
                 $form->beforeSave();
                 if ($form->model->validate()) {
-                    ;
                     if ($form->model->save()) {
                         $form->afterSave();
                         $this->module->trigger(Entity::EVENT_UPDATE_SUCCESS, new Event([
@@ -169,7 +168,7 @@ class ManageController extends Controller {
             /* @var Form $form */
             $form = Yii::createObject(ArrayHelper::merge([
                 'model' => $model,
-            ], $this->entity->form('update')));
+            ], $this->entity->form()));
 
             if (Yii::$app->getRequest()->getIsPost()) {
                 $form->load(Yii::$app->getRequest()->getBodyParams());
