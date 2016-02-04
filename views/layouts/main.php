@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use frontend\widgets\Alert;
+use asdfstudio\admin\widgets\Alert;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
