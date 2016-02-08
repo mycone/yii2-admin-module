@@ -24,9 +24,7 @@ class Input extends Base
      */
     public function renderInput($value, $attribute = null) {
         Html::addCssClass($this->options, 'form-control');
-        if (!isset($this->options['value'])) {
-            $this->options['value'] = $value;
-        }
+        $this->options['value'] = $value;
         return Html::activeInput($this->type, $this->model, $attribute ? $attribute : $this->attribute, $this->options);
     }
 }
