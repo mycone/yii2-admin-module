@@ -26,11 +26,9 @@ class Checkbox extends Base {
      */
     public function renderInput($value, $attribute = null) {
         $this->options = ArrayHelper::merge([
-            [
-                'style'   => 'float: left; margin-right: 4px;', // ugly hack
-                'checked' => $value,
-                'label'   => null,
-            ],
+            'style'   => 'float: left; margin-right: 4px;', // ugly hack
+            'checked' => $value,
+            'label'   => null,
         ], $this->options);
         return Html::activeCheckbox($this->model, $attribute ? $attribute : $this->attribute, $this->options);
     }
